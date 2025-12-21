@@ -1,370 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WA Bot Database Manager</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f4f4f4, #e0e0e0);
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-        }
-        .login-container, .main-container {
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 40px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 450px;
-            transition: all 0.3s ease;
-        }
-        .login-container:hover, .main-container:hover {
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-        h1 {
-            color: #007bff;
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #555;
-        }
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background: #fafafa;
-            color: #333;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        input:focus {
-            border-color: #007bff;
-            outline: none;
-            background: #fff;
-        }
-        button {
-            background: #007bff;
-            color: #fff;
-            border: none;
-            padding: 12px 20px;
-            margin: 10px 5px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s;
-        }
-        button:hover {
-            background: #0056b3;
-        }
-        .hidden {
-            display: none;
-        }
-        .output {
-            margin-top: 20px;
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            white-space: pre-wrap;
-            max-height: 300px;
-            overflow-y: auto;
-            text-align: left;
-            font-family: monospace;
-        }
-        .notification {
-            margin-top: 10px;
-            padding: 10px;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-        .success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        .info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WA Bot Database Manager</title>
+<style>
+body {
+    margin:0; padding:0;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg,#f4f4f4,#e0e0e0);
+    color:#333;
+    display:flex; justify-content:center; align-items:center; height:100vh;
+}
+.container { display:flex; justify-content:center; align-items:center; width:100%; height:100%; }
+.login-container, .main-container {
+    background:#fff; border:1px solid #ddd; border-radius:8px; padding:40px;
+    box-shadow:0 4px 8px rgba(0,0,0,0.1); text-align:center; width:450px; transition:0.3s;
+}
+.login-container:hover, .main-container:hover { box-shadow:0 6px 12px rgba(0,0,0,0.15); }
+h1 { color:#007bff; margin-bottom:20px; font-size:24px; }
+label { display:block; margin-bottom:5px; font-weight:bold; color:#555; }
+input { width:100%; padding:12px; margin:10px 0; border:1px solid #ccc; border-radius:4px;
+        background:#fafafa; color:#333; font-size:16px; box-sizing:border-box; }
+input:focus { border-color:#007bff; outline:none; background:#fff; }
+button { background:#007bff; color:#fff; border:none; padding:12px 20px; margin:10px 5px;
+         border-radius:4px; cursor:pointer; font-size:16px; transition:0.3s; }
+button:hover { background:#0056b3; }
+.hidden { display:none; }
+.output { margin-top:20px; background:#f9f9f9; padding:15px; border-radius:4px;
+         border:1px solid #ddd; white-space:pre-wrap; max-height:300px; overflow-y:auto;
+         text-align:left; font-family:monospace; }
+.notification { margin-top:10px; padding:10px; border-radius:4px; font-weight:bold; }
+.success { background:#d4edda; color:#155724; border:1px solid #c3e6cb; }
+.error { background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; }
+.info { background:#d1ecf1; color:#0c5460; border:1px solid #bee5eb; }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div id="login" class="login-container">
-            <h1>WA Bot Database Manager</h1>
-            <p>Please log in to access the database.</p>
-            <label for="username">Username</label>
-            <input type="text" id="username" placeholder="Enter username">
-            <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Enter password">
-            <button onclick="verifyLogin()">Login</button>
-            <div id="login-error" class="notification error hidden"></div>
-        </div>
-        <div id="main" class="main-container hidden">
-            <h1>Manage Phone Number Database</h1>
-            <label for="number">Phone Number</label>
-            <input type="text" id="number" placeholder="e.g., 628123456789">
-            <button onclick="addUser()">Add Number</button>
-            <button onclick="delUser()">Delete Number</button>
-            <button onclick="listUser()">List Numbers</button>
-            <button onclick="deleteAllUser()">Delete All</button>
-            <div id="output" class="output"></div>
-            <div id="notification" class="notification hidden"></div>
-        </div>
+<div class="container">
+    <div id="login" class="login-container">
+        <h1>WA Bot Database Manager</h1>
+        <p>Please log in to access the database..</p>
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter username">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter password">
+        <button onclick="verifyLogin()">Login</button>
+        <div id="login-error" class="notification error hidden"></div>
     </div>
+    <div id="main" class="main-container hidden">
+        <h1>Manage Phone Number Database</h1>
+        <label for="number">Phone Number</label>
+        <input type="text" id="number" placeholder="e.g., 628123456789">
+        <button onclick="addUser()">Add Number</button>
+        <button onclick="delUser()">Delete Number</button>
+        <button onclick="listUser()">List Numbers</button>
+        <button onclick="deleteAllUser()">Delete All</button>
+        <div id="output" class="output"></div>
+        <div id="notification" class="notification hidden"></div>
+    </div>
+</div>
 
-    <script>
-        // Hardcoded credentials for simplicity (change as needed)
-        const correctUsername = "admin"; // You can change this
-        const correctPassword = "admin123"; // You can change this
-
-        function verifyLogin() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const errorDiv = document.getElementById('login-error');
-            if (username === correctUsername && password === correctPassword) {
-                document.getElementById('login').classList.add('hidden');
-                document.getElementById('main').classList.remove('hidden');
-            } else {
-                errorDiv.textContent = "Incorrect username or password!";
-                errorDiv.classList.remove('hidden');
-            }
-        }
-
-        // Adapted from your JS code, using browser fetch
-        const rawNumUrl = 'https://raw.githubusercontent.com/Yogi3738/database-V/refs/heads/main/database.json';
-        const fetchNumbers = async () => {
-            try {
-                const res = await fetch(rawNumUrl);
-                const data = await res.json();
-                return Array.isArray(data?.nomor) ? data.nomor : [];
-            } catch (err) {
-                console.error("ERROR FETCHING NUMBERS:", err.message);
-                return [];
-            }
-        };
-
-        const VerifyUser = async (nomor) => {
-            const numbers = await fetchNumbers();
-            return numbers.includes(nomor.trim());
-        };
-
-        const GITHUB_TOKEN = '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'; // Token baru yang Anda berikan
-        const REPO = 'Yogi3738/database-V'; // Nama repo yang benar
-        const FILE_PATH = 'database.json'; // Pastikan file path benar
-        const BRANCH = 'main';
-        const apiUrl = `https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`;
-        const headers = {
-            'Authorization': `token ${GITHUB_TOKEN}`,
-            'Accept': 'application/vnd.github.v3+json'
-        };
-
-        async function fetchDatabase() {
-            try {
-                // Coba GET tanpa token dulu jika repo public
-                let res = await fetch(apiUrl);
-                if (!res.ok) {
-                    // Jika gagal, coba dengan token
-                    res = await fetch(apiUrl, { headers });
-                }
-                if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-                const file = await res.json();
-                // Trim and decode base64, with error handling
-                const decoded = atob(file.content.trim());
-                const content = JSON.parse(decoded);
 <script>
-    // Kredensial hardcoded untuk kesederhanaan (ubah sesuai kebutuhan)
-    const correctUsername = "admin"; // Anda bisa mengubah ini
-    const correctPassword = "admin123"; // Anda bisa mengubah ini
+const LOGIN_KEY = "wa_bot_logged_userr";
 
-    function verifyLogin() {
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const errorDiv = document.getElementById('login-error');
-        if (username === correctUsername && password === correctPassword) {
-            document.getElementById('login').classList.add('hidden');
-            document.getElementById('main').classList.remove('hidden');
-        } else {
+// Daftar user partner + admin
+const USERS = {
+  "yorie": "yorieajah",
+  "partner1": "pass123",
+  "partner2": "pass123",
+  "partner3": "pass123",
+  "partner4": "pass123",
+  "partner5": "pass123"
+};
+
+// cek status login saat load
+window.addEventListener('load', () => {
+    const loggedUser = localStorage.getItem(LOGIN_KEY);
+    const loginDiv = document.getElementById('login');
+    const mainDiv = document.getElementById('main');
+
+    if(loggedUser && USERS[loggedUser]){
+        if(loginDiv) loginDiv.classList.add('hidden');
+        if(mainDiv) mainDiv.classList.remove('hidden');
+
+        // set timer logout 30 menit dari saat load
+        setTimeout(logout, 30*60*1000);
+    } else {
+        // tampil login jika belum login
+        if(loginDiv) loginDiv.classList.remove('hidden');
+        if(mainDiv) mainDiv.classList.add('hidden');
+    }
+});
+
+// login function
+function verifyLogin(){
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const errorDiv = document.getElementById('login-error');
+
+    if(USERS[username] && USERS[username] === password){
+        localStorage.setItem(LOGIN_KEY, username);
+
+        const loginDiv = document.getElementById('login');
+        const mainDiv = document.getElementById('main');
+
+        if(loginDiv) loginDiv.classList.add('hidden');
+        if(mainDiv) mainDiv.classList.remove('hidden');
+
+        // set timer logout 30 menit
+        setTimeout(logout, 30*60*1000);
+    } else {
+        if(errorDiv){
             errorDiv.textContent = "Username atau password salah!";
-            errorDiv.classList.remove('hidden');
+            errorDiv.classList.remove("hidden");
         }
     }
+}
 
-    // Diadaptasi dari kode JS Anda, menggunakan fetch browser
-    const rawNumUrl = 'https://raw.githubusercontent.com/Yogi3738/database-V/refs/heads/main/database.json';
-    const fetchNumbers = async () => {
-        try {
-            const res = await fetch(rawNumUrl);
-            const data = await res.json();
-            return Array.isArray(data?.nomor) ? data.nomor : [];
-        } catch (err) {
-            console.error("ERROR FETCHING NUMBERS:", err.message);
-            return [];
-        }
-    };
+// logout function
+function logout(){
+    localStorage.removeItem(LOGIN_KEY);
+    const loginDiv = document.getElementById('login');
+    const mainDiv = document.getElementById('main');
 
-    const VerifyUser = async (nomor) => {
-        const numbers = await fetchNumbers();
-        return numbers.includes(nomor.trim());
-    };
+    if(loginDiv) loginDiv.classList.remove('hidden');
+    if(mainDiv) mainDiv.classList.add('hidden');
+}
 
-    const GITHUB_TOKEN = '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'; // Token baru yang Anda berikan
-    const REPO = 'Yogi3738/database-V'; // Nama repo yang benar
-    const FILE_PATH = 'database.json'; // Pastikan file path benar
-    const BRANCH = 'main';
-    const apiUrl = `https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`;
-    const headers = {
-        'Authorization': `token ${GITHUB_TOKEN}`,
-        'Accept': 'application/vnd.github.v3+json'
-    };
 
-    async function fetchDatabase() {
-        try {
-            // Coba GET tanpa token dulu jika repo public
-            let res = await fetch(apiUrl);
-            if (!res.ok) {
-                // Jika gagal, coba dengan token
-                res = await fetch(apiUrl, { headers });
-            }
-            if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-            const file = await res.json();
-            // Trim and decode base64, with error handling
-            const decoded = atob(file.content.trim());
-            const content = JSON.parse(decoded);
-            return { file, content };
-        } catch (err) {
-            console.error("Error fetching database:", err);
-            throw new Error("Failed to fetch or decode database: " + err.message);
-        }
-    }
 
-    async function addUser() {
-        const number = document.getElementById('number').value.trim();
-        if (!number) return showNotification("Silakan masukkan nomor telepon!", "error");
-        try {
-            const { file, content } = await fetchDatabase();
-            if (!content.nomor.includes(number)) {
-                content.nomor.push(number);
-                const updated = btoa(JSON.stringify(content, null, 2));
-                const putRes = await fetch(apiUrl, {
-                    method: 'PUT',
-                    headers,
-                    body: JSON.stringify({
-                        message: `add user ${number}`,
-                        content: updated,
-                        sha: file.sha,
-                        branch: BRANCH
-                    })
-                });
-                if (!putRes.ok) throw new Error(`HTTP ${putRes.status}: ${putRes.statusText}`);
-                showNotification(`User ${number} berhasil ditambahkan ke GitHub!`, "success");
-            } else {
-                showNotification(`User ${number} sudah ada di database GitHub.`, "info");
-            }
-        } catch (err) {
-            showNotification("Error adding user: " + err.message, "error");
-        }
-    }
+// Raw URL untuk cepat fetch list
+const rawNumUrl = 'https://raw.githubusercontent.com/Yogi3738/database-V/main/database.json';
 
-    async function delUser() {
-        const number = document.getElementById('number').value.trim();
-        if (!number) return showNotification("Silakan masukkan nomor telepon!", "error");
-        try {
-            const { file, content } = await fetchDatabase();
-            if (!content.nomor.includes(number)) {
-                showNotification(`User ${number} tidak ditemukan.`, "error");
-                return;
-            }
-            content.nomor = content.nomor.filter(n => n !== number);
-            const updated = btoa(JSON.stringify(content, null, 2));
-            const putRes = await fetch(apiUrl, {
-                method: 'PUT',
-                headers,
+// GitHub API config
+const GITHUB_TOKEN = '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';
+const REPO = 'Yogi3738/database-V';
+const FILE_PATH = 'database.json';
+const BRANCH = 'main';
+const apiUrl = `https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`;
+const headers = {
+    'Authorization': `token ${GITHUB_TOKEN}`,
+    'Accept': 'application/vnd.github.v3+json'
+};
+
+// Fetch database from GitHub API (get SHA)
+async function fetchDatabase(){
+    let res = await fetch(apiUrl, { headers });
+    if(!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+    const file = await res.json();
+    const decoded = atob(file.content.trim());
+    const content = JSON.parse(decoded);
+    return { file, content };
+}
+
+async function addUser(retry=false){
+    const number = document.getElementById('number').value.trim();
+    if(!number) return showNotification("Enter a number!", "error");
+    try {
+        const { file, content } = await fetchDatabase();
+        if(!content.nomor.includes(number)){
+            content.nomor.push(number);
+            const updated = btoa(JSON.stringify(content,null,2));
+            const putRes = await fetch(apiUrl,{
+                method:'PUT', headers,
                 body: JSON.stringify({
-                    message: `delete user ${number}`,
-                    content: updated,
-                    sha: file.sha,
-                    branch: BRANCH
+                    message:`add user ${number}`,
+                    content:updated,
+                    sha:file.sha,
+                    branch:BRANCH
                 })
             });
-            if (!putRes.ok) throw new Error(`HTTP ${putRes.status}: ${putRes.statusText}`);
-            showNotification(`User ${number} berhasil dihapus dari GitHub.`, "success");
-        } catch (err) {
-            showNotification("Error deleting user: " + err.message, "error");
+            if(putRes.status === 409 && !retry) return addUser(true);
+            if(!putRes.ok) throw new Error(`HTTP ${putRes.status}: ${putRes.statusText}`);
+            showNotification(`User ${number} added!`,"success");
+        } else {
+            showNotification("User already exists.","info");
         }
+    } catch(err){
+        showNotification("Error adding user: "+err.message,"error");
     }
+}
 
-    async function listUser() {
-        try {
-            const { content } = await fetchDatabase();
-            const list = content.nomor.length > 0 ? content.nomor.join('\n') : 'Database kosong.';
-            document.getElementById('output').textContent = list;
-            showNotification("Nomor berhasil didaftar.", "info");
-        } catch (err) {
-            showNotification("Error listing users: " + err.message, "error");
+async function delUser(retry=false){
+    const number = document.getElementById('number').value.trim();
+    if(!number) return showNotification("Enter a number!", "error");
+    try {
+        const { file, content } = await fetchDatabase();
+        if(!content.nomor.includes(number)){
+            return showNotification("User not found!","error");
         }
+        content.nomor = content.nomor.filter(n=>n!==number);
+        const updated = btoa(JSON.stringify(content,null,2));
+        const putRes = await fetch(apiUrl,{
+            method:'PUT', headers,
+            body: JSON.stringify({
+                message:`delete user ${number}`,
+                content:updated,
+                sha:file.sha,
+                branch:BRANCH
+            })
+        });
+        if(putRes.status === 409 && !retry) return delUser(true);
+        if(!putRes.ok) throw new Error(`HTTP ${putRes.status}: ${putRes.statusText}`);
+        showNotification(`User ${number} deleted!`,"success");
+    } catch(err){
+        showNotification("Error deleting user: "+err.message,"error");
     }
+}
 
-    async function deleteAllUser() {
-        try {
-            const { file, content } = await fetchDatabase();
-            if (!Array.isArray(content.nomor) || content.nomor.length === 0) {
-                showNotification(`📭 Database sudah kosong.`, "info");
-                return;
-            }
-            content.nomor = [];
-            const updated = btoa(JSON.stringify(content, null, 2));
-            const putRes = await fetch(apiUrl, {
-                method: 'PUT',
-                headers,
-                body: JSON.stringify({
-                    message: 'delete all users',
-                    content: updated,
-                    sha: file.sha,
-                    branch: BRANCH
-                })
-            });
-            if (!putRes.ok) throw new Error(`HTTP ${putRes.status}: ${putRes.statusText}`);
-            showNotification(`🗑️ Semua data user berhasil dihapus dari database.`, "success");
-        } catch (err) {
-            showNotification("Error deleting all users: " + err.message, "error");
+async function listUser(){
+    try{
+        const res = await fetch(rawNumUrl);
+        if(!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const list = Array.isArray(data?.nomor) && data.nomor.length>0 ? data.nomor.join("\n") : "Database kosong.";
+        document.getElementById('output').textContent = list;
+        showNotification("Numbers listed successfully.","info");
+    } catch(err){
+        showNotification("Error listing users: "+err.message,"error");
+    }
+}
+
+async function deleteAllUser(retry=false){
+    try{
+        const { file, content } = await fetchDatabase();
+        if(!Array.isArray(content.nomor) || content.nomor.length===0){
+            return showNotification("Database sudah kosong.","info");
         }
+        content.nomor = [];
+        const updated = btoa(JSON.stringify(content,null,2));
+        const putRes = await fetch(apiUrl,{
+            method:'PUT', headers,
+            body: JSON.stringify({
+                message:'delete all users',
+                content:updated,
+                sha:file.sha,
+                branch:BRANCH
+            })
+        });
+        if(putRes.status===409 && !retry) return deleteAllUser(true);
+        if(!putRes.ok) throw new Error(`HTTP ${putRes.status}: ${putRes.statusText}`);
+        showNotification("All users deleted!","success");
+    } catch(err){
+        showNotification("Error deleting all users: "+err.message,"error");
     }
+}
 
-    function showNotification(message, type) {
-        const notif = document.getElementById('notification');
-        notif.textContent = message;
-        notif.className = `notification ${type}`;
-        notif.classList.remove('hidden');
-        setTimeout(() => notif.classList.add('hidden'), 5000); // Sembunyikan setelah 5 detik
-    }
+function showNotification(message,type){
+    const notif = document.getElementById('notification');
+    notif.textContent = message;
+    notif.className=`notification ${type}`;
+    notif.classList.remove('hidden');
+    setTimeout(()=>notif.classList.add('hidden'),5000);
+}
 </script>
 </body>
 </html>
