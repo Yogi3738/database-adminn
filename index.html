@@ -176,9 +176,9 @@
             return numbers.includes(nomor.trim());
         };
 
-        const GITHUB_TOKEN = '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';
-        const REPO = 'Yogi3738/database-V';
-        const FILE_PATH = 'database.json';
+        const GITHUB_TOKEN = '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'; // Token baru yang Anda berikan
+        const REPO = 'Yogi3738/database-V'; // Nama repo yang benar
+        const FILE_PATH = 'database.json'; // Pastikan file path benar
         const BRANCH = 'main';
         const apiUrl = `https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`;
         const headers = {
@@ -188,7 +188,12 @@
 
         async function fetchDatabase() {
             try {
-                const res = await fetch(apiUrl, { headers });
+                // Coba GET tanpa token dulu jika repo public
+                let res = await fetch(apiUrl);
+                if (!res.ok) {
+                    // Jika gagal, coba dengan token
+                    res = await fetch(apiUrl, { headers });
+                }
                 if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
                 const file = await res.json();
                 // Trim and decode base64, with error handling
