@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WA Bot Database Manager</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
 body {
     margin:0; padding:0;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -26,6 +28,36 @@ input:focus { border-color:#007bff; outline:none; background:#fff; }
 button { background:#007bff; color:#fff; border:none; padding:12px 20px; margin:10px 5px;
          border-radius:4px; cursor:pointer; font-size:16px; transition:0.3s; }
 button:hover { background:#0056b3; }
+button {
+    background: linear-gradient(135deg, #6a2cff, #a56bff);
+    border-radius: 10px;
+    padding: 12px 22px;
+    margin: 10px 5px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+
+    box-shadow:
+        0 0 12px rgba(168,120,255,0.6),
+        0 0 30px rgba(168,120,255,0.25);
+
+    transition: 0.25s ease;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #8b55ff, #c29bff);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow:
+        0 0 18px rgba(200,160,255,0.8),
+        0 0 40px rgba(200,160,255,0.35);
+}
+
+button:active {
+    transform: scale(0.96);
+}
 .hidden { display:none; }
 .output { margin-top:20px; background:#f9f9f9; padding:15px; border-radius:4px;
          border:1px solid #ddd; white-space:pre-wrap; max-height:300px; overflow-y:auto;
@@ -34,22 +66,163 @@ button:hover { background:#0056b3; }
 .success { background:#d4edda; color:#155724; border:1px solid #c3e6cb; }
 .error { background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; }
 .info { background:#d1ecf1; color:#0c5460; border:1px solid #bee5eb; }
+/* ===== VIGORAXVIOLEN THEME ===== */
+
+.login-container,
+.main-container {
+    background: linear-gradient(180deg, #140a2a, #0b0418);
+    border: 1px solid rgba(168, 120, 255, 0.25);
+    box-shadow:
+        0 0 25px rgba(168, 120, 255, 0.15),
+        inset 0 0 15px rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(6px);
+}
+
+h1 {
+    color: #c7a6ff;
+    text-shadow:
+        0 0 10px rgba(168,120,255,0.6),
+        0 0 25px rgba(168,120,255,0.35);
+    letter-spacing: 1px;
+}
+
+label {
+    color: #bfa9ff;
+}
+input {
+    background: #ffffff !important;   /* paksa putih */
+    color: #1a0b2e !important;        /* teks jadi gelap */
+    caret-color: #7f3cff !important;
+
+    border-radius: 10px;
+    border: none;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 500;
+
+    box-shadow:
+        0 0 15px rgba(168,120,255,0.6),
+        inset 0 0 6px rgba(0,0,0,0.2);
+
+    outline: none;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-text-fill-color: #1a0b2e !important;
+    transition: background-color 9999s ease-in-out 0s;
+    box-shadow:
+        0 0 15px rgba(168,120,255,0.6),
+        inset 0 0 6px rgba(0,0,0,0.2) !important;
+}
+
+input:focus {
+    border-color: #c9a3ff;
+    box-shadow:
+        0 0 10px rgba(201,163,255,0.8),
+        inset 0 0 10px rgba(0,0,0,0.6);
+}
+
+button {
+    background: linear-gradient(135deg, #7f3cff, #b072ff);
+    box-shadow:
+        0 0 10px rgba(168,120,255,0.6),
+        0 0 25px rgba(168,120,255,0.25);
+    font-weight: 600;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #9a5cff, #d1a0ff);
+    transform: translateY(-1px);
+}
+
+.output {
+    background: rgba(20, 10, 40, 0.85);
+    border: 1px solid rgba(168,120,255,0.3);
+    color: #e7ddff;
+}
+
+/* notification glow */
+.success {
+    background: rgba(60, 180, 120, 0.15);
+    border-color: rgba(60, 180, 120, 0.5);
+}
+
+.error {
+    background: rgba(180, 60, 60, 0.15);
+    border-color: rgba(180, 60, 60, 0.5);
+}
+
+.info {
+    background: rgba(120, 120, 255, 0.15);
+    border-color: rgba(120, 120, 255, 0.5);
+}
+/* ===== END THEME ===== */
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #eae6ff;
+
+    background: radial-gradient(circle at top, #1a0f2e, #090015 70%);
+}
+
+h1 {
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.logo-box {
+    width: 100%;
+    margin-bottom: 22px;
+    text-align: center;
+}
+
+.logo-box img {
+    width: 100%;
+    max-width: 380px;
+    border-radius: 14px;
+    box-shadow:
+        0 0 25px rgba(168,120,255,0.35),
+        0 0 60px rgba(168,120,255,0.15);
+}
+input::placeholder {
+    color: rgba(200,170,255,0.6);
+}
 </style>
 </head>
-<body>
-<div class="container">
-    <div id="login" class="login-container">
-        <h1>WA Bot Database Manager</h1>
-        <p>Please log in to access the database..</p>
+<body><div id="login" class="login-container">
+
+    <!-- THUMBNAIL / LOGO -->
+    <div class="logo-box">
+        <img src="https://files.catbox.moe/85hlhu.png" alt="VigoraXViolen Thumbnail">
+    </div>
+
+    <h1>VigoraXViolen Database</h1>
+    <p>Please log in to access the database..</p>
+
         <label for="username">Username</label>
         <input type="text" id="username" placeholder="Enter username">
         <label for="password">Password</label>
         <input type="password" id="password" placeholder="Enter password">
         <button onclick="verifyLogin()">Login</button>
         <div id="login-error" class="notification error hidden"></div>
+    </div><div id="main" class="main-container hidden">
+
+    <!-- THUMBNAIL / LOGO -->
+    <div class="logo-box">
+        <img src="https://files.catbox.moe/85hlhu.png" alt="VigoraXViolen Thumbnail">
     </div>
-    <div id="main" class="main-container hidden">
-        <h1>Manage Phone Number Database</h1>
+
+    <h1>VigoraXViolen Database</h1>
         <label for="number">Phone Number</label>
         <input type="text" id="number" placeholder="e.g., 628123456789">
         <button onclick="addUser()">Add Number</button>
@@ -62,7 +235,7 @@ button:hover { background:#0056b3; }
 </div>
 
 <script>
-const LOGIN_KEY = "wa_bot_logged_userr";
+const LOGIN_KEY = "wa_bot_log_user";
 
 // Daftar user partner + admin
 const USERS = {
@@ -134,7 +307,7 @@ function logout(){
 const rawNumUrl = 'https://raw.githubusercontent.com/Yogi3738/database-V/main/database.json';
 
 // GitHub API config
-const GITHUB_TOKEN = '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';
+const GITHUB_TOKEN = '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';
 const REPO = 'Yogi3738/database-V';
 const FILE_PATH = 'database.json';
 const BRANCH = 'main';
@@ -146,14 +319,13 @@ const headers = {
 
 // Fetch database from GitHub API (get SHA)
 async function fetchDatabase(){
-    let res = await fetch(apiUrl, { headers });
-    if(!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+    let res = await safeFetch(apiUrl, { headers });
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
     const file = await res.json();
     const decoded = atob(file.content.trim());
     const content = JSON.parse(decoded);
     return { file, content };
 }
-
 async function addUser(retry=false){
     const number = document.getElementById('number').value.trim();
     if(!number) return showNotification("Enter a number!", "error");
@@ -162,15 +334,18 @@ async function addUser(retry=false){
         if(!content.nomor.includes(number)){
             content.nomor.push(number);
             const updated = btoa(JSON.stringify(content,null,2));
-            const putRes = await fetch(apiUrl,{
-                method:'PUT', headers,
+
+            const putRes = await fetch(apiUrl, {
+                method: 'PUT',
+                headers,
                 body: JSON.stringify({
-                    message:`add user ${number}`,
-                    content:updated,
-                    sha:file.sha,
-                    branch:BRANCH
+                    message: `add user ${number}`,
+                    content: updated,
+                    sha: file.sha,
+                    branch: BRANCH
                 })
             });
+
             if(putRes.status === 409 && !retry) return addUser(true);
             if(!putRes.ok) throw new Error(`HTTP ${putRes.status}: ${putRes.statusText}`);
             showNotification(`User ${number} added!`,"success");
@@ -253,6 +428,21 @@ function showNotification(message,type){
     notif.className=`notification ${type}`;
     notif.classList.remove('hidden');
     setTimeout(()=>notif.classList.add('hidden'),5000);
+}
+
+function sleep(ms){
+    return new Promise(r => setTimeout(r, ms));
+}
+
+async function safeFetch(url, options={}, retry=true){
+    await sleep(1200); // delay biar ga spam
+    const res = await fetch(url, options);
+    if((res.status === 401 || res.status === 403) && retry){
+        console.warn("401/403 kena, retry...");
+        await sleep(1800);
+        return safeFetch(url, options, false);
+    }
+    return res;
 }
 </script>
 </body>
