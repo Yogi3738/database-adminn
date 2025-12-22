@@ -229,6 +229,7 @@ input::placeholder {
         <button onclick="delUser()">Delete Number</button>
         <button onclick="listUser()">List Numbers</button>
         <button onclick="deleteAllUser()">Delete All</button>
+        <h5>KALAU KLIK BUTTON TPI GA KE ADD, TPI PAS MO ADD HIJAU, ITU BRRTI UDH DONE, LIST NYA LGI RUSAK</h5>
         <div id="output" class="output"></div>
         <div id="notification" class="notification hidden"></div>
     </div>
@@ -307,7 +308,7 @@ function logout(){
 const rawNumUrl = 'https://raw.githubusercontent.com/Yogi3738/database-V/main/database.json';
 
 // GitHub API config
-const GITHUB_TOKEN = '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';
+const GITHUB_TOKEN = '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';
 const REPO = 'Yogi3738/database-V';
 const FILE_PATH = 'database.json';
 const BRANCH = 'main';
@@ -325,6 +326,16 @@ async function fetchDatabase(){
     const decoded = atob(file.content.trim());
     const content = JSON.parse(decoded);
     return { file, content };
+}
+async function safeFetch(url, options={}, retry=true){
+    await sleep(5000); // delay biar ga spam
+    const res = await fetch(url, options);
+    if((res.status === 401 || res.status === 403) && retry){
+        console.warn("401/403 kena, retry...");
+        await sleep(5000);
+        return safeFetch(url, options, false);
+    }
+    return res;
 }
 async function addUser(retry=false){
     const number = document.getElementById('number').value.trim();
